@@ -49,5 +49,11 @@ RSpec.describe Leaderboard, type: :service do
         expect(bottom_five.collect { |r| r["place_id"] }).to_not include(least_scenic_place.id)
       end
     end
+
+    describe "as_json" do
+      it "returns the leaderboard values as JSON" do
+        expect(Leaderboard.new.as_json).to be_a Hash
+      end
+    end
   end
 end

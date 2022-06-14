@@ -1,4 +1,9 @@
 class Leaderboard
+  include ActiveModel::Model
+  include ActiveModel::Serializers::JSON
+
+  attr_accessor :most_scenic_places, :least_scenic_places, :percentage_rated
+
   NUM_PLACES_IN_TOP = 5
 
   DEFAULT_OPTIONS = {
@@ -33,6 +38,14 @@ class Leaderboard
 
   def percentage_rated
     Place.with_enough_votes(DEFAULT_OPTIONS).count.to_f / TOTAL_UK_LAND_AREA_IN_SQ_KM * 100
+  end
+
+  def as_json
+    {
+      "most_scenic_places" => most_scenic_places,
+      "least_scenic_places" => least_scenic_places,
+      "percentage_rated" => percentage_rated
+    }
   end
 
   private
