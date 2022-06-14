@@ -8,7 +8,8 @@ class PlacesController < ActionController::Base
   end
 
   def leaderboard
-    @leaderboard = LeaderboardPresenter.new
+    leaderboard = fetch_or_calculate_stats
+    @leaderboard = LeaderboardPresenter.new(leaderboard)
   end
 
   def show
@@ -28,5 +29,14 @@ class PlacesController < ActionController::Base
   def just_rated_place
     # we don't want a 404 error if somehow the place cannot be found
     Place.where(id: just_rated_place_id).first if just_rated_place_id
+  end
+
+  def fetch_or_calculate_stats
+    if File.exist?("tmp/leaderboard.json")
+      leaderboard_data = File.read("tmp/leaderboard.json")
+      Leaderboard.new.from_json(leaderboard_data)
+    else
+      LeaderboardCalculator.new
+    end
   end
 end

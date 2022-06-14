@@ -1,14 +1,8 @@
 class LeaderboardPresenter
   include ActionView::Helpers::NumberHelper
 
-
-  def initialize(leaderboard: nil)
-    if File.exist?("tmp/leaderboard.json")
-      leaderboard_data = File.read("tmp/leaderboard.json")
-      @leaderboard = Leaderboard.new.from_json(leaderboard_data)
-    else
-      @leaderboard = Leaderboard.new
-    end
+  def initialize(leaderboard)
+    @leaderboard = leaderboard
   end
 
   def top_five
