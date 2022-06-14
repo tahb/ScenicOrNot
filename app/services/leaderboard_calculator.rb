@@ -1,9 +1,4 @@
-class Leaderboard
-  include ActiveModel::Model
-  include ActiveModel::Serializers::JSON
-
-  attr_accessor :most_scenic_places, :least_scenic_places, :percentage_rated
-
+class LeaderboardCalculator
   NUM_PLACES_IN_TOP = 5
 
   DEFAULT_OPTIONS = {

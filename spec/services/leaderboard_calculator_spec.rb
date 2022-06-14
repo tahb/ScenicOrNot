@@ -1,4 +1,4 @@
-RSpec.describe Leaderboard, type: :service do
+RSpec.describe LeaderboardCalculator, type: :service do
   context "most and least scenic places" do
     let(:most_scenic_place) { FactoryBot.create(:place) }
     let(:least_scenic_place) { FactoryBot.create(:place) }
@@ -12,7 +12,7 @@ RSpec.describe Leaderboard, type: :service do
 
     describe "most_scenic_places" do
       it "returns the top 5 rated places" do
-        top_five = Leaderboard.new.most_scenic_places
+        top_five = LeaderboardCalculator.new.most_scenic_places
 
         expect(top_five.size).to eql(5)
         expect(top_five.first).to match(hash_including(
@@ -25,14 +25,14 @@ RSpec.describe Leaderboard, type: :service do
       it "does not include any inactive places" do
         most_scenic_place.update(active_on_geograph: false)
 
-        top_five = Leaderboard.new.most_scenic_places
+        top_five = LeaderboardCalculator.new.most_scenic_places
         expect(top_five.collect { |r| r["place_id"] }).to_not include(most_scenic_place.id)
       end
     end
 
     describe "least_scenic_places" do
       it "returns the bottom 5 rated places" do
-        bottom_five = Leaderboard.new.least_scenic_places
+        bottom_five = LeaderboardCalculator.new.least_scenic_places
 
         expect(bottom_five.size).to eql(5)
         expect(bottom_five.first).to match(hash_including(
@@ -45,14 +45,18 @@ RSpec.describe Leaderboard, type: :service do
       it "does not include any inactive places" do
         least_scenic_place.update(active_on_geograph: false)
 
-        bottom_five = Leaderboard.new.least_scenic_places
+        bottom_five = LeaderboardCalculator.new.least_scenic_places
         expect(bottom_five.collect { |r| r["place_id"] }).to_not include(least_scenic_place.id)
       end
     end
 
+    describe "percentage_rated" do
+      it "calculates the percentage of places with at least 3 votes"
+    end
+
     describe "as_json" do
       it "returns the leaderboard values as JSON" do
-        expect(Leaderboard.new.as_json).to be_a Hash
+        expect(LeaderboardCalculator.new.as_json).to be_a(Hash)
       end
     end
   end
